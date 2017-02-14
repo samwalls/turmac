@@ -11,11 +11,12 @@ project(runtm) # this sets the project name
 # invoked and put all files that match the pattern in the variables
 # `sources` and `data`.
 
-include_directories(${PROJECT_SOURCE_DIR}/include)
+# use globbing to find files automatically.
+
+include_directories(${PROJECT_SOURCE_DIR}/include/)
+file(GLOB_RECURSE includes     include/*.h include/*.hpp)
 file(GLOB_RECURSE sources      src/*/**.cpp)
 file(GLOB_RECURSE sources_test src/test/*/**.cpp)
-# You can use set(sources src/main.cpp) etc if you don't want to
-# use globbing to find files automatically.
 
 ###############################################################################
 ## target definitions #########################################################
@@ -23,7 +24,7 @@ file(GLOB_RECURSE sources_test src/test/*/**.cpp)
 
 # The data is just added to the executable, because in some IDEs (QtCreator)
 # files are invisible when they are not explicitly part of the project.
-add_executable(runtm ${sources})
+add_executable(runtm ${sources} ${includes})
 
 # Just for example add some compiler flags.
 target_compile_options(runtm PUBLIC -std=c++1y -Wall -Wfloat-conversion)
