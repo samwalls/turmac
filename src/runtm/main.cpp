@@ -1,9 +1,8 @@
 #include <iostream>
-#include "turmac/turmac.h"
+#include <turmac.h>
 
 int main() {
-    turmac::example e = {};
-    e.ex = "hello world";
-    std::cout << e.ex << std::endl;
-    turmac::printExample();
+  turmac::TuringMachine *m = new turmac::TuringMachine();
+  auto tape = m->getTape();
+  std::cout << std::string(tape.begin(), tape.end()) << std::endl;
 }
