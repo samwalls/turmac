@@ -7,27 +7,25 @@ project(runtm) # this sets the project name
 ## file globbing ##############################################################
 ###############################################################################
 
-# These instructions search the directory tree when cmake is
-# invoked and put all files that match the pattern in the variables
-# `sources` and `data`.
-
-# use globbing to find files automatically.
-
 include_directories(${PROJECT_SOURCE_DIR}/include/)
 file(GLOB_RECURSE includes     include/*.h include/*.hpp)
-file(GLOB_RECURSE sources      src/*/**.cpp)
-file(GLOB_RECURSE sources_test src/test/*/**.cpp)
+file(GLOB_RECURSE sources      src/*/*.cpp)
+file(GLOB_RECURSE sources_test src/test/*.cpp)
+#remove tests from source files
+list(REMOVE_ITEM sources       ${sources_test})
 
 ###############################################################################
 ## target definitions #########################################################
 ###############################################################################
 
-# The data is just added to the executable, because in some IDEs (QtCreator)
-# files are invisible when they are not explicitly part of the project.
-add_executable(runtm ${sources} ${includes})
+# create the turmac library
+add_library(turmac ${sources} ${includes})
+target_compile_options(turmac PUBLIC -std=c++1y -Wall -Wfloat-conversion)
 
-# Just for example add some compiler flags.
+# create the runtm executable and link the created turmac library
+add_executable(runtm src/runtm/main.cpp)
 target_compile_options(runtm PUBLIC -std=c++1y -Wall -Wfloat-conversion)
+target_link_libraries(runtm turmac)
 
 # This allows to include files relative to the root of the src directory with a <> pair
 target_include_directories(runtm PUBLIC src/runtm)
