@@ -1,7 +1,7 @@
 # This CMake file was forked from this source (CC): https://github.com/krux02/minimal_cmake_example
 
 cmake_minimum_required(VERSION 3.0) # setting this is required
-project(runtm) # this sets the project name
+project(turmac) # this sets the project name
 
 ###############################################################################
 ## file globbing ##############################################################
@@ -23,7 +23,7 @@ add_library(turmac ${sources} ${includes})
 target_compile_options(turmac PUBLIC -std=c++1y -Wall -Wfloat-conversion)
 
 # create the runtm executable and link the created turmac library
-add_executable(runtm src/runtm/main.cpp)
+add_executable(runtm src/runtm/main.cpp include/turmac/State.h include/turmac/Transition.h include/turmac/asd.h include/turmac/etc.h include/turmac/Direction.h)
 target_compile_options(runtm PUBLIC -std=c++1y -Wall -Wfloat-conversion)
 target_link_libraries(runtm turmac)
 
