@@ -1,27 +1,55 @@
 #ifndef TURMAC_TURINGMACHINE_H
 #define TURMAC_TURINGMACHINE_H
 
+#include "etc.h"
+#include "Transition.h"
+
 #include <vector>
+#include <map>
 
 namespace turmac {
 
+/// A Turing machine simulator
 class TuringMachine {
  public:
 
-  TuringMachine();
-
-  /// Run the turing machine on the input tape.
   /// @throws std::invalid_argument if there are any symbols on the tape that the turing machine does not have in its
   /// set of input symbols.
-  /// @param input the input "tape" to the turing machine
-  /// @returns the final tape result of this turing machine - equivelently one could get the tape value with
-  /// TuringMachine.getTape() after calling run.
-  void run(std::vector<char> input);
+  TuringMachine(std::vector<SYMBOL> &tape, std::vector<STATE> &states, std::map<STATE, std::map<SYMBOL, Transition>> &transitions, STATE accept, STATE reject);
 
-  std::vector<char> getTape();
+  /// Run the turing machine on the input tape.
+  /// @param n the maximum number of moves to try
+  /// @returns the tape result after running for n steps - equivelently one could get the tape value with
+  /// TuringMachine.getTape() after calling next.
+  SYMBOL next(unsigned long n);
 
- protected:
-  std::vector<char> tape;
+  /// \return the tape this Turing machine operates on
+  std::string getTape();
+
+ private:
+
+  std::vector<SYMBOL> &tape;
+
+  unsigned long position;
+
+  std::vector<STATE> states;
+
+  STATE currentState;
+
+  STATE acceptState;
+
+  STATE rejectState;
+
+  std::map<STATE, std::map<SYMBOL, Transition>> transitions;
+
+  /// initialize this Turing machine
+  void init(std::vector<SYMBOL> tape, std::vector<STATE> states, std::map<STATE, std::map<SYMBOL, Transition>> transitions, STATE accept, STATE reject);
+
+  void move(Direction, unsigned long length);
+
+  SYMBOL read();
+
+  void write(SYMBOL v);
 };
 
 }
