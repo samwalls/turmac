@@ -3,6 +3,8 @@
 
 #include "etc.h"
 
+#include <map>
+
 namespace turmac {
 
 /// State-transition pairs map to a transition object; this defines what to do based on current state and input.
@@ -20,6 +22,9 @@ struct Transition {
   /// the number of cells to move by in the specified direction
   unsigned long moveLength;
 };
+
+/// A table mapping current state and input, to a Transition struct.
+typedef std::map<STATE, std::map<SYMBOL, Transition>> TransitionTable;
 
 }
 

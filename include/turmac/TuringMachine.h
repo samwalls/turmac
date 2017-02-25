@@ -15,7 +15,7 @@ class TuringMachine {
 
   /// @throws std::invalid_argument if there are any symbols on the tape that the turing machine does not have in its
   /// set of input symbols.
-  TuringMachine(std::vector<SYMBOL> &tape, std::vector<STATE> &states, std::map<STATE, std::map<SYMBOL, Transition>> &transitions, STATE accept, STATE reject);
+  TuringMachine(std::vector<SYMBOL> &tape, std::vector<STATE> &states, TransitionTable &transitions, STATE accept, STATE reject);
 
   /// Run the turing machine on the input tape.
   /// @param n the maximum number of moves to try
@@ -40,10 +40,10 @@ class TuringMachine {
 
   STATE rejectState;
 
-  std::map<STATE, std::map<SYMBOL, Transition>> transitions;
+  TransitionTable transitions;
 
   /// initialize this Turing machine
-  void init(std::vector<SYMBOL> tape, std::vector<STATE> states, std::map<STATE, std::map<SYMBOL, Transition>> transitions, STATE accept, STATE reject);
+  void init(std::vector<SYMBOL> tape, std::vector<STATE> states, TransitionTable transitions, STATE accept, STATE reject);
 
   void move(Direction, unsigned long length);
 

@@ -6,7 +6,7 @@ namespace turmac {
 
 /*-------- PUBLIC --------*/
 
-TuringMachine::TuringMachine(vector<SYMBOL> &tape, vector<STATE> &states, map<STATE, map<SYMBOL, Transition>> &transitions, STATE accept, STATE reject) : tape(tape) {
+TuringMachine::TuringMachine(vector<SYMBOL> &tape, vector<STATE> &states, TransitionTable &transitions, STATE accept, STATE reject) : tape(tape) {
   init(tape, states, transitions, accept, reject);
 }
 
@@ -27,7 +27,7 @@ string TuringMachine::getTape() {
 
 /*-------- PRIVATE --------*/
 
-void TuringMachine::init(vector<SYMBOL> tape, vector<STATE> states, map<STATE, map<SYMBOL, Transition>> transitions, STATE accept, STATE reject) {
+void TuringMachine::init(vector<SYMBOL> tape, vector<STATE> states, TransitionTable transitions, STATE accept, STATE reject) {
   this->tape = tape;
   this->states = states;
   this->transitions = transitions;
