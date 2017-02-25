@@ -23,7 +23,7 @@ add_library(turmac ${sources} ${includes})
 target_compile_options(turmac PUBLIC -std=c++1y -Wall -Wfloat-conversion)
 
 # create the runtm executable and link the created turmac library
-add_executable(runtm src/runtm/main.cpp include/turmac/State.h include/turmac/Transition.h include/turmac/asd.h include/turmac/etc.h include/turmac/Direction.h)
+add_executable(runtm src/runtm/main.cpp)
 target_compile_options(runtm PUBLIC -std=c++1y -Wall -Wfloat-conversion)
 target_link_libraries(runtm turmac)
 
