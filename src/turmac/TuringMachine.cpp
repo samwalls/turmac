@@ -1,4 +1,4 @@
-#include <turmac/TuringMachine.h>
+#include "turmac/TuringMachine.h"
 
 using namespace std;
 
@@ -6,7 +6,7 @@ namespace turmac {
 
 /*-------- PUBLIC --------*/
 
-TuringMachine::TuringMachine(vector<SYMBOL> &tape, vector<STATE> &states, map<STATE, map<SYMBOL, Transition>> &transitions, STATE accept, STATE reject) : tape() {
+TuringMachine::TuringMachine(vector<SYMBOL> &tape, vector<STATE> &states, map<STATE, map<SYMBOL, Transition>> &transitions, STATE accept, STATE reject) : tape(tape) {
   init(tape, states, transitions, accept, reject);
 }
 

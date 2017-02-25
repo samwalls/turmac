@@ -11,7 +11,7 @@
 
 #include "turmac/etc.h"
 
-#include "turmac/Transition.h
+#include "turmac/Transition.h"
 #include "turmac/TuringMachine.h"
 
 #endif //TURMAC_TURMAC_H

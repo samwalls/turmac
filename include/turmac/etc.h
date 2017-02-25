@@ -1,6 +1,8 @@
 #ifndef TURMAC_ETC_H
 #define TURMAC_ETC_H
 
+#include <string>
+
 /*
  * Small types and various constants for use throughout the turmac namespace.
  */
