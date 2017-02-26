@@ -12,7 +12,9 @@ file(GLOB_RECURSE includes     include/*.h include/*.hpp)
 file(GLOB_RECURSE sources      src/*/*.cpp)
 file(GLOB_RECURSE sources_test src/test/*.cpp)
 #remove tests from source files
-list(REMOVE_ITEM sources       ${sources_test})
+if (DEFINED ${sources_test})
+    list(REMOVE_ITEM sources       ${sources_test})
+endif()
 
 ###############################################################################
 ## target definitions #########################################################
