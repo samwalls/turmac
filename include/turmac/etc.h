@@ -10,10 +10,10 @@
 namespace turmac {
 
 /// Type of symbol which tape cells contain, and Turing machine's deal with.
-typedef wchar_t SYMBOL;
+typedef char SYMBOL;
 
 /// The blank tape cell.
-static const SYMBOL EMPTY = 0;
+static const SYMBOL EMPTY = '_';
 
 /// The type of states in a Turing machine.
 typedef std::string STATE;

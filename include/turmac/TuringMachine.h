@@ -15,7 +15,7 @@ class TuringMachine {
 
   /// @throws std::invalid_argument if there are any symbols on the tape that the turing machine does not have in its
   /// set of input symbols.
-  TuringMachine(std::vector<SYMBOL> &tape, std::vector<STATE> &states, TransitionTable &transitions, STATE accept, STATE reject);
+  TuringMachine(std::vector<STATE> &states, std::vector<char> alphabet, TransitionTable &transitions, STATE accept, STATE reject);
 
   /// Run the turing machine on the input tape.
   /// @param n the maximum number of moves to try
@@ -23,33 +23,53 @@ class TuringMachine {
   /// TuringMachine.getTape() after calling next.
   SYMBOL next(unsigned long n);
 
+  /// True if and only if the current state is either accepting or rejecting
+  bool isHalted();
+
+  /// True if and only if the current state is accepting
+  bool isAccepting();
+
+  /// True if and only if the current state is rejecting
+  bool isRejecting();
+
   /// \return the tape this Turing machine operates on
   std::string getTape();
 
+  /// set the input tape for this turing machine
+  void setTape(std::vector<SYMBOL> tape);
+
+  /// set the input tape for this turing machine
+  void setTape(std::string tape);
+
+  /// \returns the current tape-head position
+  unsigned long getPosition();
+
+  /// \returns a string representation of the turing machine; including the tape, and the current position on it, noting
+  /// whether or not the current state is halting.
+  std::string toString();
+
  private:
 
-  std::vector<SYMBOL> &tape;
+  std::vector<SYMBOL> tape;
 
   unsigned long position;
 
   std::vector<STATE> states;
 
-  STATE currentState;
+  STATE currentState, acceptState, rejectState;
 
-  STATE acceptState;
-
-  STATE rejectState;
+  std::vector<char> alphabet;
 
   TransitionTable transitions;
-
-  /// initialize this Turing machine
-  void init(std::vector<SYMBOL> tape, std::vector<STATE> states, TransitionTable transitions, STATE accept, STATE reject);
 
   void move(Direction, unsigned long length);
 
   SYMBOL read();
 
   void write(SYMBOL v);
+
+  /// \returns true if the passed symbol is in the tape alphabet
+  bool inAlphabet(SYMBOL symbol);
 };
 
 }

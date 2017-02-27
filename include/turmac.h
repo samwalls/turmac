@@ -11,6 +11,8 @@
 
 #include "turmac/etc.h"
 
+#include "turmac/Parser.h"
+#include "turmac/ParseException.h"
 #include "turmac/Transition.h"
 #include "turmac/TuringMachine.h"
 
