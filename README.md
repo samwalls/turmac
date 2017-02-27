@@ -24,7 +24,7 @@ states
     ;
 
 state-def
-    : SYMBOL WS (ACCEPTING | REJECTING)?
+    : STATE WS (ACCEPTING | REJECTING)?
     ;
 
 alphabet
