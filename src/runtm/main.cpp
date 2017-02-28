@@ -2,7 +2,7 @@
 #include <iostream>
 
 /*-------- CONSTANTS, VARIABLES & DECLARATIONS --------*/
-static const std::string USAGE = "usage: runtm <tm-file> <input-file> [-d|--debug]";
+static const std::string USAGE = "usage: runtm <tm-file> <input-file> [-d|--debug] [-h|--help]";
 
 static std::string TMFILE, INPUTFILE = "";
 static bool HELP = false, DEBUG = false;
