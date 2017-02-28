@@ -50,7 +50,7 @@ Return 0 Return 0 L
 Return 1 Return 1 L
 Return = Return = L
 Return # Return # L
-Return ~ Return ~ L
+Return ~ Count ~ R
 Return ? Return ? L
 Return $ Count $ R
 Count # GoToAdd ~ R
