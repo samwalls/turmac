@@ -79,6 +79,8 @@ std::string TuringMachine::toString() {
       oss << tape[i];
     }
   }
+  oss << " ";
+  oss << currentState;
   return oss.str();
 }
 
