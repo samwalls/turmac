@@ -26,6 +26,7 @@ Init _ qa _ L
 Init 0 Init0 $ R
 Init 1 Init1 $ R
 Init # Init# $ R
+Init = Init= $ R
 Init0 _ Init? 0 R
 Init0 0 Init0 0 R
 Init0 1 Init1 0 R
@@ -91,7 +92,7 @@ Check0 _ qa _ L
 Check1 1 ReturnCheck ~ L
 Check1 0 qr 0 L
 Check1 ~ Check1 ~ R
-Check1 _ qa _ L
+Check1 _ qr _ L
 CheckTrailing ~ CheckTrailing ~ R
 CheckTrailing _ qa _ L
 CheckTrailing 0 qa _ L
