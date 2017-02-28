@@ -18,7 +18,7 @@ CarryToResult
 1Result
 CarryResult
 Flip
-NoOp
+NoLeftOp
 alphabet 5 $ * # 0 1
 Init 0 Init0 $ R
 Init 1 Init1 $ R
@@ -73,7 +73,7 @@ CarryToResult # CarryResult # R
 0Result 0 Return * L
 0Result 1 qr 1 L
 0Result * 0Result * R
-0Result _ qa _ L
+0Result _ Return _ L
 1Result 0 qr 0 L
 1Result 1 Return * L
 1Result * 1Result * R
@@ -81,10 +81,10 @@ CarryToResult # CarryResult # R
 CarryResult 0 Flip * R
 CarryResult 1 qr 1 L
 CarryResult * CarryResult * R
-NoOp 0 qr 0 L
-NoOp 1 qr 1 L
-NoOp # NoOp # R
-NoOp * NoOp * R
-NoOp _ qa _ L
+NoLeftOp 0 qr 0 L
+NoLeftOp 1 qr 1 L
+NoLeftOp # NoLeftOp # R
+NoLeftOp * NoLeftOp * R
+NoLeftOp _ qa _ L
 Flip 0 Flip 1 R
 Flip 1 Return 0 L
