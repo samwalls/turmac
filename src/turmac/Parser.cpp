@@ -18,7 +18,7 @@ TuringMachine Parser::parse() {
   //parsing
   vector<StateDef> states = parseStates();
   vector<SYMBOL> alphabet = parseAlphabet();
-  vector<TransitionDef> transitions = parseTransition();
+  vector<TransitionDef> transitions = parseTransition(states);
   //semantic analysis
   vector<STATE> tmStates = vector<STATE>();
   TransitionTable tmTransitions = TransitionTable();
@@ -139,7 +139,7 @@ vector<SYMBOL> Parser::parseAlphabet() {
   return alphabet;
 }
 
-vector<TransitionDef> Parser::parseTransition() {
+vector<TransitionDef> Parser::parseTransition(vector<StateDef> states) {
   vector<TransitionDef> transitions = vector<TransitionDef>();
   string line;
   while (!(line = readLine()).empty()) {
@@ -148,10 +148,14 @@ vector<TransitionDef> Parser::parseTransition() {
     if (symbols.size() < 4)
       throw ParseException(getLineError(currentLine, line, "bad transition definition"));
     t.from = symbols[0];
+    if (!isState(t.from, states))
+      throw ParseException(getLineError(currentLine, line, t.from + " is not in the list of states"));
     if (symbols[1].size() > 1)
       throw ParseException(getLineError(currentLine, line, "unexpected symbol \"" + symbols[1] + "\""));
     t.read = symbols[1][0];
     t.to = symbols[2];
+    if (!isState(t.to, states))
+      throw ParseException(getLineError(currentLine, line, t.to + " is not in the list of states"));
     if (symbols[3].size() > 1)
       throw ParseException(getLineError(currentLine, line, "unexpected symbol \"" + symbols[3] + "\""));
     t.write = symbols[3][0];
@@ -166,6 +170,13 @@ vector<TransitionDef> Parser::parseTransition() {
   if (transitions.size() <= 0)
     throw new ParseException(getLineError(currentLine, line, "expected one or more transition definitions"));
   return transitions;
+}
+
+bool Parser::isState(STATE identifier, vector<StateDef> states) {
+  for (auto s : states)
+    if (s.name == identifier)
+      return true;
+  return false;
 }
 
 }

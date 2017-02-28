@@ -60,7 +60,10 @@ class Parser {
   std::vector<SYMBOL> parseAlphabet();
 
   /// \return matched length; state from; read symbol; state to; write symbol; true if right, false if left.
-  std::vector<TransitionDef> parseTransition();
+  std::vector<TransitionDef> parseTransition(std::vector<StateDef> states);
+
+  /// \return true if the state represented by the identifier exists for the list of defined states
+  bool isState(STATE identifier, std::vector<StateDef> states);
 };
 
 }
