@@ -17,6 +17,7 @@ alphabet 5 $ # a b c
 qInit a qInitA $ R
 qInit b qInitB $ R
 qInit c qInitC $ R
+qInit _ qa _ L
 qInitA a qInitA a R
 qInitA b qInitB a R
 qInitA c qInitC a R
@@ -32,7 +33,7 @@ qInitC _ qReturn c L
 qReturn a qReturn a L
 qReturn b qReturn b L
 qReturn c qReturn c L
-qReturn # qReturn # L
+qReturn # qFindNext # R
 qReturn $ qFindNext $ R
 qFindNext a qMvRightA # R
 qFindNext b qMvRightB # R
