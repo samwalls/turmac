@@ -1,4 +1,4 @@
-states 20
+states 21
 Init
 qa +
 qr -
@@ -18,11 +18,14 @@ CarryToResult
 1Result
 CarryResult
 Flip
-NoLeftOp
+NoLeftOperand
+NoRightOperand
 alphabet 5 $ * # 0 1
 Init 0 Init0 $ R
 Init 1 Init1 $ R
-Init # InitHash $ R
+Init # qr # L
+Init * qr * L
+Init _ qr _ L
 Init0 0 Init0 0 R
 Init0 1 Init1 0 R
 Init0 # InitHash 0 R
@@ -43,7 +46,7 @@ Return $ LeftOp $ R
 LeftOp 0 0ToRightOp * R
 LeftOp 1 1ToRightOp * R
 LeftOp * LeftOp * R
-LeftOp # 0RightOp # R
+LeftOp # NoLeftOperand # R
 0ToRightOp 0 0ToRightOp 0 R
 0ToRightOp 1 0ToRightOp 1 R
 0ToRightOp # 0RightOp # R
@@ -81,10 +84,15 @@ CarryToResult # CarryResult # R
 CarryResult 0 Flip * R
 CarryResult 1 qr 1 L
 CarryResult * CarryResult * R
-NoLeftOp 0 qr 0 L
-NoLeftOp 1 qr 1 L
-NoLeftOp # NoLeftOp # R
-NoLeftOp * NoLeftOp * R
-NoLeftOp _ qa _ L
+NoLeftOperand 0 0ToResult * R
+NoLeftOperand 1 1ToResult * R
+NoLeftOperand # NoRightOperand # R
+NoLeftOperand * NoLeftOperand * R
+NoLeftOperand _ qa _ L
+NoRightOperand 0 0Result * L
+NoRightOperand 1 1Result * L
+NoRightOperand # NoRightOperand # R
+NoRightOperand * NoRightOperand * R
+NoRightOperand _ qa _ L
 Flip 0 Flip 1 R
 Flip 1 Return 0 L
