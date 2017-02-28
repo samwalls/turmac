@@ -43,7 +43,7 @@ Return $ LeftOp $ R
 LeftOp 0 0ToRightOp * R
 LeftOp 1 1ToRightOp * R
 LeftOp * LeftOp * R
-LeftOp # NoOp # R
+LeftOp # 0RightOp # R
 0ToRightOp 0 0ToRightOp 0 R
 0ToRightOp 1 0ToRightOp 1 R
 0ToRightOp # 0RightOp # R
