@@ -172,7 +172,7 @@ vector<TransitionDef> Parser::parseTransition(vector<StateDef> states) {
     transitions.push_back(t);
   }
   if (transitions.size() <= 0)
-    throw new ParseException(getLineError(currentLine, line, "expected one or more transition definitions"));
+    throw ParseException(getLineError(currentLine, line, "expected one or more transition definitions"));
   return transitions;
 }
 

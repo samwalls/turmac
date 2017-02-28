@@ -35,8 +35,10 @@ int main(int argc, char** argv) {
     std::cout << std::endl;
     if (tm.isHalted())
       std::cout << "halted: " << (tm.isAccepting() ? "accepting" : "rejecting") << std::endl;
-  } catch (turmac::ParseException& e) {
-    std::cerr << e.what() << std::endl;
+  } catch (turmac::ParseException e) {
+    std::cerr << "error when parsing: " << e.what() << std::endl;
+  } catch (std::runtime_error& e) {
+    std::cerr << "runtime error: " << e.what() << std::endl;
   }
   exit(0);
 }
