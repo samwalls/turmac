@@ -31,6 +31,10 @@ TuringMachine Parser::parse() {
       reject = state.name;
     tmStates.push_back(state.name);
   }
+  if (accept.size() == 0)
+    throw ParseException("no accept state defined!");
+  if (reject.size() == 0)
+    throw ParseException("no accept state defined!");
   //add transitions
   for (TransitionDef tr : transitions) {
     tmTransitions[tr.from][tr.read] = Transition {

@@ -26,9 +26,14 @@ SYMBOL TuringMachine::next(unsigned long n) {
   //for n, read the tape value and adjust the Turing machine's state accordingly
   for (unsigned long i = 0; i < n && (currentState != acceptState) && (currentState != rejectState); i++) {
     Transition t = transitions[currentState][read()];
-    currentState = t.state;
-    write(t.symbol);
-    move(t.direction, t.moveLength);
+    //assume that if the transition entry contains null information that it was not defined, subsume to a reject state
+    if (t.symbol) {
+      currentState = t.state;
+      write(t.symbol);
+      move(t.direction, t.moveLength);
+    } else {
+      currentState = rejectState;
+    }
   }
   return read();
 }
