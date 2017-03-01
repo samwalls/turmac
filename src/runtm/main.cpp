@@ -2,10 +2,10 @@
 #include <iostream>
 
 /*-------- CONSTANTS, VARIABLES & DECLARATIONS --------*/
-static const std::string USAGE = "usage: runtm <tm-file> <input-file> [-d|--debug] [-h|--help] [-t|--time]";
+static const std::string USAGE = "usage: runtm <tm-file> <input-file> [-d|--debug] [-h|--help] [-t|--time] [-s|--space]";
 
 static std::string TMFILE, INPUTFILE = "";
-static bool HELP = false, DEBUG = false, TIME = false;
+static bool HELP = false, DEBUG = false, TIME = false, SPACE = false;
 
 static void parseArgs(int argc, char** argv);
 
@@ -38,7 +38,11 @@ int main(int argc, char** argv) {
     if (tm.isHalted())
       std::cout << "halted: " << (tm.isAccepting() ? "accepting" : "rejecting") << std::endl;
     if (TIME)
-      std::cout << "time taken: " << diffTime << std::endl;
+      std::cout << "time taken (s)  : " << diffTime << std::endl;
+    if (SPACE) {
+      std::cout << "input tape size : " << tmInputContent.size() << std::endl;
+      std::cout << "output tape size: " << tm.getTape().size() << std::endl;
+    }
   } catch (turmac::ParseException e) {
     std::cerr << "error when parsing: " << e.what() << std::endl;
   } catch (std::runtime_error& e) {
@@ -62,6 +66,8 @@ static void parseArgs(int argc, char** argv) {
       TMFILE = arg;
     else if (arg == "-t" || arg == "--time")
       TIME = true;
+    else if (arg == "-s" || arg == "--space")
+      SPACE = true;
     else if (INPUTFILE.empty() || INPUTFILE.length() == 0)
       INPUTFILE = arg;
     else {
