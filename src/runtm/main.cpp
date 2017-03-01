@@ -42,6 +42,7 @@ int main(int argc, char** argv) {
     if (SPACE) {
       std::cout << "input tape size : " << tmInputContent.size() << std::endl;
       std::cout << "output tape size: " << tm.getTape().size() << std::endl;
+      std::cout << "diff tape size  : " << tm.getTape().size() - tmInputContent.size() << std::endl;
     }
   } catch (turmac::ParseException e) {
     std::cerr << "error when parsing: " << e.what() << std::endl;
