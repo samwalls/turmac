@@ -19,7 +19,8 @@ TuringMachine::TuringMachine(vector<STATE> &states, vector<SYMBOL> alphabet, Tra
   if (states.size() < 1) {
     throw runtime_error("cannot create turing machine with no states");
   }
-  this->currentState = states[0];
+  this->initialState = states[0];
+  this->currentState = initialState;
 }
 
 SYMBOL TuringMachine::next(unsigned long n) {
@@ -64,6 +65,12 @@ void TuringMachine::setTape(vector<SYMBOL> tape) {
     if (!inAlphabet(s))
       throw runtime_error("tape is not compatible with turing machine alphabet");
   this->tape = tape;
+}
+
+void TuringMachine::reset(string tape) {
+  setTape(tape);
+  this->currentState = initialState;
+  this->position = 0;
 }
 
 unsigned long TuringMachine::getPosition() {

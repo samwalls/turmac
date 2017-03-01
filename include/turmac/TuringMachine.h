@@ -41,6 +41,9 @@ class TuringMachine {
   /// set the input tape for this turing machine
   void setTape(std::string tape);
 
+  /// Reset the Turing machine back to it's original state/position, using the specified input tape
+  void reset(std::string tape);
+
   /// \returns the current tape-head position
   unsigned long getPosition();
 
@@ -56,7 +59,7 @@ class TuringMachine {
 
   std::vector<STATE> states;
 
-  STATE currentState, acceptState, rejectState;
+  STATE initialState, currentState, acceptState, rejectState;
 
   std::vector<char> alphabet;
 
