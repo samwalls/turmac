@@ -49,5 +49,5 @@ mkdir build && cd build && cmake .. && make
 
 Taking input from a file:
 ```
-runtm <tm-file> <input-file> [-d|--debug] [-h|--help]
+runtm <tm-file> <input-file> [-d|--debug] [-q|--quiet] [-h|--help] [-t|--time] [-s|--space] [-n|--n-times <n>]
 ```
