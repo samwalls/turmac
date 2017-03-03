@@ -25,12 +25,10 @@ int main(int argc, char** argv) {
   turmac::Parser parser = turmac::Parser(TMFILE);
   turmac::TuringMachine tm = parser.parse();
   try {
-    if (!QUIET) {
-      std::cout << "running turing machine: " + TMFILE;
-      if (NTIMES > 1)
-        std::cout << " " << NTIMES << " times";
-      std::cout << std::endl;
-    }
+    std::cout << "running turing machine: " + TMFILE;
+    if (NTIMES > 1)
+      std::cout << " " << NTIMES << " times";
+    std::cout << std::endl;
     //run the turing machine NTIMES times, resetting each time
     for (unsigned int run = 0; run < NTIMES; run++) {
       tm.reset(tmInputContent);
@@ -48,8 +46,7 @@ int main(int argc, char** argv) {
       if (!QUIET)
         std::cout << std::endl;
       runTimes.push_back(float(clock() - beforeTime) / CLOCKS_PER_SEC);
-      if ((NTIMES <= 1 || !QUIET) && tm.isHalted())
-        std::cout << "halted: " << (tm.isAccepting() ? "accepting" : "rejecting") << std::endl;
+      std::cout << "halted: " << (tm.isAccepting() ? "accepting" : "rejecting") << std::endl;
     };
     //report time usage
     if (TIME) {
