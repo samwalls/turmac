@@ -1,0 +1,238 @@
+\documentclass[]{article}
+\usepackage{times}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{pgf}
+\usepackage{tikz}
+\usepackage{subfig}
+\usepackage{pgfplots}
+\usepackage{filecontents}
+\usepackage{amsmath}
+\usetikzlibrary{arrows,automata}
+\usepackage[latin1]{inputenc}
+\usepackage[round]{natbib}
+\lstset{
+  basicstyle=\fontfamily{lmvtt}\selectfont\small,
+  columns=fullflexible,
+}
+
+%opening
+\title{CS3052: Turing Machines}
+\author{ID: 150013828}
+
+\begin{document}
+
+\maketitle
+
+\section{Overview}
+In this report, a working Turing machine simulator - written in C++ - as well as four Turing machine implementations are presented. Space and time analysis of said implementations also follow.
+
+\section{Design \& Implementation}
+The design of this Turing machine is partially described by the assignment itself, in the input format. A C++ library called \emph{turmac} can be found in "include/turmac", with implementation files in "src/turmac". The library is required for, and linked to, an executable called \emph{runtm} which runs the specified Turing machine file, over a specified input file - taken as text. The code for the runtm executable resides in "src/runtm/main.cpp".
+
+\section{Building \& Running}
+\subsection{Building}
+We use cmake and make to build the project:
+\begin{lstlisting}[frame=single, language=bash]
+mkdir build && cd build && cmake .. && make
+\end{lstlisting}
+\subsection{Running}
+For example: run the program for the specified example, and use -s -t to report the space and time.
+\begin{lstlisting}[frame=single,language=bash]
+./runtm ../example/add.tm ../data/add/120.txt -s -t
+\end{lstlisting}
+
+\section{Turing Machine Implementations}
+\subsection{Palindrome Matcher}\label{sec:machine:palindrome}
+\paragraph{Outline} This Turing machine's strategy is to repeatedly scratch off symbols that have been seen at the beginning and end, reducing the working input each time. If a symbol at the start does not have a corresponding symbol at the end then the input is not a palindrome.
+\\\\
+\noindent Find the turing machine description file in "example/palindrome.tm", and example files to run on the machine in "example/palindrome/".
+
+\subsection{Addition Verifier}\label{sec:machine:adder}
+\paragraph{Outline} This Turing machine scans the first available bit of each input and then compares to the output; taking care of carries and trailing zeros. If the bits taken from the first two inputs do not match the expected bit in the third input then the machine rejects - the sum is not valid.
+\\\\
+\noindent Find the turing machine description file in "example/add.tm", and example files to run on the machine in "example/add/".
+
+\subsection{Two's Complement Verifier}\label{sec:machine:twoscomplement}
+\paragraph{Problem:} Accept all $w \in L = \{ w_1\#w_2 : w_1\text{is the two's complement of}w_2 \}$. This usage of "two's complement" has no inherent size: two's complement is usually defined in terms of a sequence of bits of a specific length; in this example the length is determined by the input number itself.
+
+\paragraph{Solution:} Transform the right hand of the input into it's two's complement manually (flip all bits and add one to the value); then checking if it is the same as the left hand.
+\\\\
+\noindent Find the turing machine description file in "example/add.tm", and example files to run on the machine in "example/add/".
+
+\subsection{String Length Counter}\label{sec:machine:length}
+\paragraph{Problem:} Accept all $w \in L = \{s=l : s \in \#^* \text{ and } l \text{ is the binary representation of } |s|\}$ - binary representation is the same as in the addition verifier (\ref{sec:machine:adder}) - least-significant bit first. E.g. "\#\#\#=11" should be accepted; "\#\#\#\#=11" should not.
+
+\paragraph{Solution:} First create an area for holding the generated length value (in binary), go back to the beginning. Then, for every \# seen in the left operand, go to the created length value and add 1. Once there is no more input, check that the provided binary value for length is equal to the generated one.
+\\\\
+\noindent Find the turing machine description file in "example/length.tm", and example files to run on the machine in "example/length/".
+
+\section{Experiment \& Analysis}
+\subsection{Testing Setup}
+For all of the experiments performed, it is important to note what constitutes "input size", "time taken", and "space used".
+\\\\
+I didn't quite have enough time to make an automated testing suite. However, there are examples inputs in the folder "examples" - all txt files prepended with "a\_" should accept, and the others reject.
+
+\paragraph{Input Size:} The combined total of input as arguments, that are not necessary for input syntax (such as the \# separating the arguments in the binary adder (\ref{sec:machine:adder})).
+\paragraph{Time Taken:} The amount of time taken to run the turing machine to a halting state. The measured time is averaged over 100 runs (using the command line flag for runtm, "-n 100").
+\paragraph{Space Used:} The difference in tape size before and after running the Turing machine. Tape size is the size of the vector returned from the turmac library's \emph{TuringMachine::getTape} - so, the tape size does not include the \emph{infinite} set of symbols to the right, which have not been "discovered" yet by the machine. This way, we can study the amount of extra space required as a function of \emph{input size}.
+
+\subsection{Results}
+
+\begin{figure}[!htbp]
+	\centering
+	\begin{minipage}[b]{0.4\textwidth}
+		\begin{tikzpicture}
+		\begin{axis}[xlabel=Input Size, ylabel=Time (s), legend style={at={(0.5,-0.1)},anchor=north} ]
+		\addplot table [x=palindromeX, y=palindromeT, col sep=comma] {../data/palindrome.csv};
+		%\addlegendentry{time}
+		\end{axis}
+		\end{tikzpicture}
+		\caption{palindrome.tm\label{fig:palindrome:time}}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[b]{0.4\textwidth}
+		\begin{tikzpicture}
+		\begin{axis}[xlabel=Input Size, ylabel=Space Used, legend style={at={(0.5,-0.1)},anchor=north} ]
+		\addplot table [x=palindromeX, y=palindromeS, col sep=comma] {../data/palindrome.csv};
+		%\addlegendentry{space}
+		\end{axis}
+		\end{tikzpicture}
+		\caption{palindrome.tm\label{fig:palindrome:space}}
+	\end{minipage}
+\end{figure}
+
+\begin{figure}[!htbp]
+	\centering
+	\begin{minipage}[b]{0.4\textwidth}
+		\begin{tikzpicture}
+		\begin{axis}[xlabel=Input Size, ylabel=Time (s), legend style={at={(0.5,-0.1)},anchor=north} ]
+		\addplot table [x=addX, y=addT, col sep=comma] {../data/add.csv};
+		%\addlegendentry{time}
+		\end{axis}
+		\end{tikzpicture}
+		\caption{add.tm\label{fig:add:time}}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[b]{0.4\textwidth}
+		\begin{tikzpicture}
+		\begin{axis}[xlabel=Input Size, ylabel=Space Used, legend style={at={(0.5,-0.1)},anchor=north} ]
+		\addplot table [x=addX, y=addS, col sep=comma] {../data/add.csv};
+		%\addlegendentry{space}
+		\end{axis}
+		\end{tikzpicture}
+		\caption{add.tm\label{fig:add:space}}
+	\end{minipage}
+\end{figure}
+
+\begin{figure}[!htbp]
+	\centering
+	\begin{minipage}[b]{0.4\textwidth}
+		\begin{tikzpicture}
+		\begin{axis}[xlabel=Input Size, ylabel=Time (s), legend style={at={(0.5,-0.1)},anchor=north} ]
+		\addplot table [x=2cX, y=2cT, col sep=comma] {../data/2c.csv};
+		%\addlegendentry{time}
+		\end{axis}
+		\end{tikzpicture}
+		\caption{2c.tm\label{fig:2c:time}}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[b]{0.4\textwidth}
+		\begin{tikzpicture}
+		\begin{axis}[xlabel=Input Size, ylabel=Space Used, legend style={at={(0.5,-0.1)},anchor=north} ]
+		\addplot table [x=2cX, y=2cS, col sep=comma] {../data/2c.csv};
+		%\addlegendentry{space}
+		\end{axis}
+		\end{tikzpicture}
+		\caption{2c.tm\label{fig:2c:space}}
+	\end{minipage}
+\end{figure}
+
+\begin{figure}[!htbp]
+	\centering
+	\begin{minipage}[b]{0.4\textwidth}
+		\begin{tikzpicture}
+		\begin{axis}[xlabel=Input Size, ylabel=Time (s), legend style={at={(0.5,-0.1)},anchor=north} ]
+		\addplot table [x=lengthX, y=lengthT, col sep=comma] {../data/length.csv};
+		%\addlegendentry{time}
+		\end{axis}
+		\end{tikzpicture}
+		\caption{length.tm\label{fig:length:time}}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[b]{0.4\textwidth}
+		\begin{tikzpicture}
+		\begin{axis}[xlabel=Input Size, ylabel=Space Used, legend style={at={(0.5,-0.1)},anchor=north} ]
+		\addplot table [x=lengthX, y=lengthS, col sep=comma] {../data/length.csv};
+		%\addlegendentry{space}
+		\end{axis}
+		\end{tikzpicture}
+		\caption{length.tm\label{fig:length:space}}
+	\end{minipage}
+\end{figure}
+
+\begin{figure}[!htbp]
+	\centering
+	\begin{minipage}[b]{0.4\textwidth}
+		\begin{tikzpicture}
+		\begin{axis}[xlabel=Input Size, ylabel=Time (s), legend style={at={(0.5,-0.1)},anchor=north} ]
+		\addplot table [x=palindromeX, y=palindromeT, col sep=comma] {../data/palindrome.csv};
+		\addlegendentry{palindrome}
+		\addplot table [x=addX, y=addT, col sep=comma] {../data/add.csv};
+		\addlegendentry{add}
+		\addplot table [x=2cX, y=2cT, col sep=comma] {../data/2c.csv};
+		\addlegendentry{2c}
+		\addplot table [x=lengthX, y=lengthT, col sep=comma] {../data/length.csv};
+		\addlegendentry{length}
+		%\addlegendentry{space}
+		\end{axis}
+		\end{tikzpicture}
+		\caption{combined view of the time taken for each machine\label{fig:combined:time}}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[b]{0.4\textwidth}
+		\begin{tikzpicture}
+		\begin{axis}[xlabel=Input Size, ylabel=Space Used, legend style={at={(0.5,-0.1)},anchor=north} ]
+		\addplot table [x=palindromeX, y=palindromeS, col sep=comma] {../data/palindrome.csv};
+		\addlegendentry{palindrome}
+		\addplot table [x=addX, y=addS, col sep=comma] {../data/add.csv};
+		\addlegendentry{add}
+		\addplot table [x=2cX, y=2cS, col sep=comma] {../data/2c.csv};
+		\addlegendentry{2c}
+		\addplot table [x=lengthX, y=lengthS, col sep=comma] {../data/length.csv};
+		\addlegendentry{length}
+		%\addlegendentry{space}
+		\end{axis}
+		\end{tikzpicture}
+		\caption{combined view of the extra space used for each machine\label{fig:combined:space}}
+	\end{minipage}
+\end{figure}
+
+\subsection{Analysis}
+The time taken by all of these machines are very similar as shown by figure \ref{fig:combined:time}. However, it is important to note that they all operate in a very similar way - that is: zig-zagging across the input. Indicating that for each symbol of input, all the other symbols are involved.
+
+Thus, I project that the time complexity of all the machines may be quadratic with input size.
+\\\\
+Except for the length calculator, the space complexity of all these machines seems to be constant with input size (figure \ref{fig:combined:space}). The length calculator (figure \ref{fig:length:space}) appears to grow logarithmically in space. this is reasonable as the amount of extra space required is precisely the number of digits needed to represent the input (this is also logarithmic).
+
+\section{Evaluation \& Conclusion}
+\subsection{Evaluation}
+Something that could definitely be improved on to inspire further confidence that the turmac library is correct is to write unit tests for it (I was not sure how to automatically include the Google tests library via \emph{cmake}). However, the number of example inputs is enough that one could say the executable and its linked library work "well enough".
+\\\\
+It would be good to attempt to optimize some of the Turing machines, and seeing exactly what kind of performance benefit is gained by doing so.
+\\\\
+My conclusion that the time complexity of the presented machines is quadratic could only really be verified if I did further regression analysis and reasoning with the compiled data.
+\\\\
+Further interesting points to research include:
+\begin{itemize}
+	\item nondeterministic Turing machines (via multi-threading perhaps)
+	\item multi-tape Turing machines
+	\item What happens when the tape space is 2D? Will the fact that it is easier to move around gain anything performance-wise, or will it just remain faster in coefficient?
+\end{itemize}
+\subsection{Conclusion}
+We can conclude that the presented Turing machines have very similar time complexity. And that the devised machine for calculating string length takes logarithmic space.
+
+\end{document}
